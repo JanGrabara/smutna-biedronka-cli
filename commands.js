@@ -2,7 +2,6 @@
 const program = require('commander');
 const { prompt } = require('inquirer');
 const request = require('request')
-const { dirAdress, staticAdress } = require('./staticConfig')
 const { getBufferAndApiKey } = require('./zip')
 
 
@@ -10,18 +9,19 @@ program
   .command('zipapp [otherDirs...]')
   .action(async (otherDirs) => {
 
-    let buffer, apiKey
+    let buffer, apiKey, uploadUrl
 
     try {
-      let obj  = await getBufferAndApiKey(otherDirs)
-      buffer = obj.buffer
-      apiKey = obj.apiKey
+      const { bufferr, config } = await getBufferAndApiKey(otherDirs)
+      buffer = bufferr
+      apiKey = config.apiKey
+      uploadUrl = config.uploadUrl + "/api/Apps/AddAppFiles"
     } catch (err) {
       console.error(err)
       process.exit()
     }
 
-    const r = request.post(dirAdress, function (err, httpResponse, body) {
+    const r = request.post(uploadUrl, function (err, httpResponse, body) {
       if (err) {
         return console.error('upload failed:', err);
       }
@@ -38,18 +38,19 @@ program
   .command('zipstatic [otherDirs...]')
   .action(async otherDirs => {
 
-    let buffer, apiKey
+    let buffer, apiKey, uploadUrl
 
     try {
-      let obj  = await getBufferAndApiKey(otherDirs)
-      buffer = obj.buffer
-      apiKey = obj.apiKey
+      const { bufferr, config } = await getBufferAndApiKey(otherDirs)
+      buffer = bufferr
+      apiKey = config.apiKey
+      uploadUrl = config.uploadUrl + "/api/StaticContent/AddFiles"
     } catch (err) {
       console.error(err)
       process.exit()
     }
 
-    const r = request.post(staticAdress, function (err, httpResponse, body) {
+    const r = request.post(uploadUrl, function (err, httpResponse, body) {
       if (err) {
         return console.error('upload failed:', err);
       }

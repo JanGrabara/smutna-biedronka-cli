@@ -12,12 +12,12 @@ async function getBufferAndApiKey(otherDirs) {
         throw "No such dir"
     }
 
-    const apiKey = getApiKey(configPath)
-    if (!apiKey) {
-        throw "No api-key provided"
+    const config = getConfig(configPath)
+    if (!config) {
+        throw "No config provided"
     }
-    const buffer = await zipdirAsync(filePath, { filter: filertNode_modules })
-    return {buffer,apiKey}
+    const bufferr = await zipdirAsync(filePath, { filter: filertNode_modules })
+    return { bufferr, config }
 }
 
 module.exports.getBufferAndApiKey = getBufferAndApiKey
@@ -31,11 +31,11 @@ function getPaths(otherDirs) {
     return { filePath, configPath }
 }
 
-function getApiKey(configPath) {
+function getConfig(configPath) {
     if (fs.existsSync(configPath)) {
         const config = JSON.parse(fs.readFileSync(configPath, 'utf8'))
-        if (config.apiKey) {
-            return config.apiKey
+        if (config.apiKey && config.uploadUrl) {
+            return config
         }
     }
     return null
