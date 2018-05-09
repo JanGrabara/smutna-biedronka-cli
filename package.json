@@ -2,7 +2,7 @@
   "name": "biedronka",
   "version": "1.0.0",
   "description": "biedronka-cli",
-  "main": "index.js",
+  "main": "commands.js",
   "preferGlobal": true,
   "bin": "./commands.js",
   "scripts": {
