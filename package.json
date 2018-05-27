@@ -1,6 +1,6 @@
 {
   "name": "biedronka",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "biedronka-cli",
   "main": "commands.js",
   "preferGlobal": true,
