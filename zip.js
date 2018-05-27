@@ -4,10 +4,10 @@ const path = require('path')
 const zipdir = require('zip-dir')
 const zipdirAsync = promisify(zipdir)
 
-async function getBufferAndApiKey(otherDirs) {
+async function getBufferAndApiKey(otherDirs, staticConfigCmdPath) {
 
-    const { configPath, filePath } = getPaths(otherDirs)
-
+    const filePath = getFilePath(otherDirs)
+    const configPath = getStaticConfigPath(filePath, staticConfigCmdPath)
     if (!fs.existsSync(filePath)) {
         throw "No such dir"
     }
@@ -22,13 +22,15 @@ async function getBufferAndApiKey(otherDirs) {
 
 module.exports.getBufferAndApiKey = getBufferAndApiKey
 
-function getPaths(otherDirs) {
-
+function getFilePath(otherDirs) {
     const dir = otherDirs[0] ? otherDirs[0].toString() : ''
-    const filePath = path.join(process.cwd(), dir)
-    const configPath = path.join(filePath, "staticConfig.json")
+    return path.join(process.cwd(), dir)
+}
 
-    return { filePath, configPath }
+function getStaticConfigPath(filePath, staticConfigCmdPath) {
+    return staticConfigCmdPath ?
+        path.join(process.cwd(), "biedronka.config.json") :
+        path.join(filePath, "biedronka.config.json")
 }
 
 function getConfig(configPath) {
